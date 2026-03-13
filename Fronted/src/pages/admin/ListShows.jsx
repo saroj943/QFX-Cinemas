@@ -1,24 +1,19 @@
 import React, { useEffect, useState } from 'react'
+import { useAppContext } from '../../context/AppContext'
 
 const ListShows = () => {
 
   const currency = import.meta.env.VITE_CURRENCY
+
+  const { axios, getToken, user} = useAppContext()
 
   const [shows, setShows] = useState([])
   const [Loading, setLoading] = useState(true)
 
   const getAllShows = async () => {
     try {
-      setShows([{
-        movie: dummyShowsData[0],
-        showDateTime: "2025-06-30T02:30:00.000Z",
-        showPrice: 59,
-        occupiedSeats : {
-          A1: "user_1",
-          B1: "user_2",
-          C1: "user_3"
-        }
-      }])
+      const {data} = await axios.get("/api/admin/all-shows", { headers: {Authentication: `Bearer ${await getToken()}`}})
+      setShows(data.shows)
       setLoading(false)
     } catch(error) {
       console.log(error)
@@ -26,8 +21,10 @@ const ListShows = () => {
   }
 
   useEffect(() => {
-    getAllShows();
-  }, []);
+    if (user) {
+      getAllShows();
+    }
+  }, [user]);
 
   return !Loading ? (
     <>
