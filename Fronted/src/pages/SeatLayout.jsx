@@ -1,5 +1,6 @@
 import React, { useNavigate, useState, useParams, use, useEffect } from 'react'
 import isoTimeFormat from '../lib/isoTimeFormat'
+import { useAppContext } from '../context/AppContext'
 
 const SeatLayout = () => {
 
@@ -8,6 +9,8 @@ const SeatLayout = () => {
   const [show, setShow] = useState(null)
 
   const navigate = useNavigate()
+
+  const {axios, getToken, user} = useAppContext()``
 
   const getShow = async () => {
     const show = dummyShowsData.find(show => show._id === id)
